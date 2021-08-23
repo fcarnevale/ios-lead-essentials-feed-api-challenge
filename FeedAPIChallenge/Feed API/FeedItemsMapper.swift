@@ -14,20 +14,27 @@ internal final class FeedItemsMapper {
 	private struct Root: Decodable {
 		let items: [Item]
 
-		var imageFeed: [FeedImage] { [] }
+		var imageFeed: [FeedImage] {
+			return items.map {
+				.init(id: $0.imageID,
+				      description: $0.imageDescription,
+				      location: $0.imageLocation,
+				      url: $0.imageURL)
+			}
+		}
 	}
 
 	private struct Item: Decodable {
 		let imageID: UUID
 		let imageDescription: String?
 		let imageLocation: String?
-		let image: URL
+		let imageURL: URL
 
 		enum CodingKeys: String, CodingKey {
 			case imageID = "image_id"
 			case imageDescription = "image_desc"
 			case imageLocation = "image_loc"
-			case image = "image_URL"
+			case imageURL = "image_url"
 		}
 	}
 
